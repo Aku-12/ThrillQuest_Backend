@@ -1,13 +1,39 @@
 const express = require("express");
-const upload = require("../../middlewares/fileUpload")
-const {createActivity, getActivity, deleteActivity } = require("../../controllers/admin/activitiesController");
-const { authenticateUser, isAdmin } = require("../../middlewares/authorizedUser");
+const upload = require("../../middlewares/fileUpload");
+const {
+  createActivity,
+  getActivities,
+  getActivityById,
+  updateActivity,
+  deleteActivity,
+} = require("../../controllers/admin/activitiesController");
+const {
+  authenticateUser,
+  isAdmin,
+} = require("../../middlewares/authorizedUser");
 
 const router = express.Router();
 
-router.post("/", authenticateUser,  upload.single('image'), isAdmin, createActivity)
-router.get("/", authenticateUser, isAdmin, getActivity)
-// router.update("/:id", updateActivity)
-router.delete("/:id", authenticateUser, isAdmin, deleteActivity)
+router.post(
+  "/",
+  authenticateUser,
+  isAdmin,
+  upload.array("images", 5),
+  createActivity
+);
 
-module.exports = router
+router.get("/", authenticateUser, isAdmin, getActivities);
+
+router.get("/:id", authenticateUser, isAdmin, getActivityById);
+
+router.put(
+  "/:id",
+  authenticateUser,
+  isAdmin,
+  upload.array("images", 5),
+  updateActivity
+);
+
+router.delete("/:id", authenticateUser, isAdmin, deleteActivity);
+
+module.exports = router;
