@@ -11,7 +11,7 @@ const activitySchema = new mongoose.Schema({
   },
   images: {
     type: [String],
-    required: true,
+    required: false,
   },
   price: {
     type: Number,
@@ -24,7 +24,7 @@ const activitySchema = new mongoose.Schema({
   difficulty: {
     type: String,
     enum: ["Beginner", "Intermediate", "Advanced"],
-    required: true,
+    default:"Beginner",
   },
   bookings: {
     type: Number,

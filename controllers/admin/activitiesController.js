@@ -4,7 +4,7 @@ const Activity = require("../../models/activityModel");
 exports.createActivity = async (req, res) => {
   try {
     const {
-      name,
+      name, 
       location,
       price,
       duration,
@@ -14,11 +14,10 @@ exports.createActivity = async (req, res) => {
       status,
     } = req.body;
 
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ success: false, message: "At least one image is required" });
-    }
+    console.log("REQ BODY:", req.body);
+    console.log("REQ FILES:", req.files);
 
-    const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+    const imagePaths = req.files?.map((file) => `/uploads/${file.filename}`) || [];
 
     const activity = new Activity({
       name,
@@ -113,6 +112,8 @@ exports.getActivityById = async (req, res) => {
 exports.updateActivity = async (req, res) => {
   try {
     const { id } = req.params;
+
+    const body = req.body || {};
     const {
       name,
       location,
@@ -122,15 +123,31 @@ exports.updateActivity = async (req, res) => {
       bookings,
       rating,
       status,
-    } = req.body;
+      existingImages,
+    } = body;
 
-    // Find existing activity
     const activity = await Activity.findById(id);
     if (!activity) {
       return res.status(404).json({ success: false, message: "Activity not found" });
     }
 
-    // Prepare updated data
+    // Parse existingImages (from frontend) safely
+    let existingImagesArray = [];
+    if (existingImages) {
+      try {
+        existingImagesArray = JSON.parse(existingImages);
+      } catch (error) {
+        console.error("Error parsing existingImages JSON:", error);
+        return res.status(400).json({ success: false, message: "Invalid existingImages format" });
+      }
+    }
+
+    // Get new uploaded images
+    let newImages = [];
+    if (req.files && req.files.length > 0) {
+      newImages = req.files.map(file => `/uploads/${file.filename}`);
+    }
+
     const updatedData = {
       name,
       location,
@@ -140,15 +157,9 @@ exports.updateActivity = async (req, res) => {
       bookings,
       rating,
       status,
+      images: existingImagesArray.concat(newImages),
     };
 
-    // If images are uploaded, append them to existing images array
-    if (req.files && req.files.length > 0) {
-      const newImages = req.files.map(file => `/uploads/${file.filename}`);
-      updatedData.images = activity.images.concat(newImages);
-    }
-
-    // Update document
     const updatedActivity = await Activity.findByIdAndUpdate(id, updatedData, { new: true });
 
     res.json({
@@ -161,6 +172,7 @@ exports.updateActivity = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
 
 // DELETE Activity
 exports.deleteActivity = async (req, res) => {

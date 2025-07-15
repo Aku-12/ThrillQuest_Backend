@@ -22,7 +22,7 @@ router.post(
   createActivity
 );
 
-router.get("/", authenticateUser, isAdmin, getActivities);
+router.get("/", getActivities);
 
 router.get("/:id", authenticateUser, isAdmin, getActivityById);
 
