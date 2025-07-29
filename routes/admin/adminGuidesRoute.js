@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/", authenticateUser, isAdmin, createGuide);
 
 // GET All Guides with Search, Filter, Pagination
-router.get("/", authenticateUser, getGuides);
+router.get("/", getGuides);
 
 // GET Single Guide by ID
 router.get("/:id", authenticateUser, getGuideById);
