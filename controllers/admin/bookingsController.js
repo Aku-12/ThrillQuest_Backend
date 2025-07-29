@@ -10,8 +10,8 @@ exports.createBooking = async (req, res) => {
 
     const { activityId, customerName, guideName, tourDate } = req.body;
 
-    // Validate input
-    if (!activityId || !customerName || !guideName || !tourDate) { 
+    // Validate input (This part should now pass!)
+    if (!activityId || !customerName || !guideName || !tourDate) {
       console.log("req.body", req.body)
       return res.status(400).json({
         success: false,
@@ -19,28 +19,36 @@ exports.createBooking = async (req, res) => {
       });
     }
 
+    // --- The error is most likely happening somewhere below here ---
     const activity = await Activity.findById(activityId);
     if (!activity) {
       return res.status(404).json({ success: false, message: "Activity not found" });
     }
-    const userId = req.user._id;
+
+    // THIS LINE IS A PRIME SUSPECT: req.user._id
+    const userId = req.user._id; 
+
+    console.log(userId)
+
     const newBooking = new Booking({
-      activity: activityId,
+      activity: activityId, // Mongoose expects 'activity' field for ID
       customerName,
       guideName,
       tourDate,
       userId
     });
 
-    await newBooking.save();
+    await newBooking.save(); // Also a suspect if Mongoose validation or DB connection fails
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Booking created successfully",
       booking: newBooking,
     });
+
+    console.log(newBooking)
   } catch (error) {
-    console.error("Create booking error:", error);
+    console.error("Create booking error:", error); // This should log the actual error on your server
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
