@@ -14,6 +14,7 @@ const adminBookingsRoute = require("./routes/admin/adminBookingsRoute");
 const adminGuidesRoute = require("./routes/admin/adminGuidesRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const contactRoutes = require("./routes/contactRoutes");
+const profileRoutes = require("./routes/profileRoute");
 
 connectDatabase();
 
@@ -35,6 +36,7 @@ app.use("/api/admin/bookings", adminBookingsRoute);
 app.use("/api/admin/guides", adminGuidesRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/contact", contactRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Export app (without listen)
 module.exports = app;
