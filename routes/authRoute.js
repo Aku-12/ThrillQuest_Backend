@@ -1,8 +1,21 @@
-const { createAccount, login } = require('../controllers/userController') 
+const express = require('express');
+const router = express.Router();
 
-const router = require('express').Router()
+// Import controller functions
+const { 
+    createAccount, 
+    login, 
+    getUserProfile, 
+    changePassword, 
+    updateUserProfile 
+} = require('../controllers/userController');
 
-router.post('/register', createAccount) 
-router.post('/login', login) 
+// Import middlewares
+const { authenticateUser } = require('../middlewares/authorizedUser');
+const { single } = require('../middlewares/fileUpload'); // Correctly import the single upload middleware
 
-module.exports = router
+router.post('/register', createAccount);
+
+router.post('/login', login);
+
+module.exports = router;
