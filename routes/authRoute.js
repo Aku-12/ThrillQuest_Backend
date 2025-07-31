@@ -5,9 +5,6 @@ const router = express.Router();
 const { 
     createAccount, 
     login, 
-    getUserProfile, 
-    changePassword, 
-    updateUserProfile 
 } = require('../controllers/userController');
 
 // Import middlewares
