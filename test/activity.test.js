@@ -135,3 +135,4 @@ describe("Activity API", () => {
     expect(res.body.message).toMatch(/deleted/i);
   });
 });
+
