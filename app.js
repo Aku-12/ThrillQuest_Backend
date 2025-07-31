@@ -1,10 +1,9 @@
 // app.js
 const express = require("express");
-require("dotenv").config();
+require("dotenv").config(); // Safe to leave for dev/test parity
+
 const cors = require("cors");
 const path = require("path");
-
-const connectDatabase = require("./config/database");
 
 // Import routes
 const authRoute = require("./routes/authRoute");
@@ -15,8 +14,6 @@ const adminGuidesRoute = require("./routes/admin/adminGuidesRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const contactRoutes = require("./routes/contactRoutes");
 const profileRoutes = require("./routes/profileRoute");
-
-connectDatabase();
 
 const app = express();
 
@@ -38,5 +35,4 @@ app.use("/api/reviews", reviewRoute);
 app.use("/api/contact", contactRoutes);
 app.use("/api/profile", profileRoutes);
 
-// Export app (without listen)
 module.exports = app;
