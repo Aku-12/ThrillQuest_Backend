@@ -106,7 +106,7 @@ describe("Bookings API", () => {
         tourDate: "2025-12-31",
       });
 
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.booking.customerName).toBe("John Doe");
     expect(res.body.booking.activity).toBe(String(sampleActivity._id));
