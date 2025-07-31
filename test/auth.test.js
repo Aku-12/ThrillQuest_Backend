@@ -43,7 +43,7 @@ describe('Auth API', () => {
 
   it('should create a new user', async () => {
     const res = await request(app).post('/api/auth/register').send(newUser);
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
   });
 
@@ -69,7 +69,7 @@ describe('Auth API', () => {
       .post('/api/auth/login')
       .send({ email: newUser.email, password: 'wrongpass' });
 
-    expect(res.statusCode).toBe(404);
+    expect(res.statusCode).toBe(401);
   });
 
   it('should reject login if user not found', async () => {
