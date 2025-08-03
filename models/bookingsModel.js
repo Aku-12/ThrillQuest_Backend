@@ -32,7 +32,7 @@ const bookingsModel = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,  // ensure every booking belongs to a user
+      required: true,
     },
   },
   { timestamps: true }
